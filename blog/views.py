@@ -1,20 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView
 from .models import Post
-
-posts = [
-    {
-        'author': 'Ja',
-        'title': 'Blog Post 1',
-        'content': 'First post comment',
-        'date_posted': 'August 27, 2023'
-    },
-    {
-        'author': 'Ty',
-        'title': 'Blog Post 2',
-        'content': 'Second post comment',
-        'date_posted': 'August 28, 2023'
-    }
-]
 
 
 def home(request):
@@ -22,6 +8,22 @@ def home(request):
         'posts': Post.objects.all()
     }
     return render(request, 'blog/home.html', context)
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+
+
+class PostDetailView(DetailView):
+    model = Post
+
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content']
 
 
 def about(request):
